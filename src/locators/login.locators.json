@@ -1,0 +1,54 @@
+{
+    "usernameInput": {
+        "primary": "#username",
+        "fallbacks": [
+            "input[name='username']",
+            "[data-testid='username']",
+            "input[placeholder*='username' i]",
+            "//input[@id='username']"
+        ]
+    },
+    "passwordInput": {
+        "primary": "#password",
+        "fallbacks": [
+            "input[name='password']",
+            "[data-testid='password']",
+            "input[type='password']",
+            "//input[@id='password']"
+        ]
+    },
+    "loginButton": {
+        "primary": "button[type='submit']",
+        "fallbacks": [
+            "#login-btn",
+            "button:has-text('Login')",
+            "[data-testid='login-button']",
+            "//button[@type='submit']",
+            "button.radius"
+        ]
+    },
+    "loginForm": {
+        "primary": "#login",
+        "fallbacks": [
+            "form#login",
+            "[data-testid='login-form']",
+            "//form[@id='login']"
+        ]
+    },
+    "errorMessage": {
+        "primary": "#flash",
+        "fallbacks": [
+            ".flash.error",
+            "[data-testid='flash-message']",
+            "//div[@id='flash']"
+        ]
+    },
+    "successMessage": {
+        "primary": "#flash.success",
+        "fallbacks": [
+            ".flash.success",
+            "[data-testid='success-message']",
+            "//div[contains(@class, 'success')]"
+        ]
+    }
+}

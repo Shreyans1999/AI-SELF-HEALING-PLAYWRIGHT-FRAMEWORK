@@ -2,6 +2,10 @@
 
 > **Enterprise-Grade End-to-End Test Automation using Playwright, TypeScript & AI (LLMs)**
 
+[![Playwright Tests](https://github.com/your-repo/ai-self-healing-playwright/actions/workflows/playwright-ci.yml/badge.svg)](https://github.com/your-repo/ai-self-healing-playwright/actions)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
+[![Playwright](https://img.shields.io/badge/Playwright-1.40-green)](https://playwright.dev/)
+
 ---
 
 ## 📌 Overview
@@ -10,159 +14,167 @@ Modern web applications evolve rapidly. UI changes such as updated IDs, modified
 
 This project introduces an **AI-powered Self-Healing Test Automation Framework** built using **Playwright + TypeScript**, designed to **automatically detect, heal, and recover from locator failures at runtime** using **LLM-based reasoning**.
 
-The framework is **resume-ready, production-quality, and interview-defensible**, demonstrating strong **SDET / QA Automation expertise**, scalable architecture, CI/CD readiness, and **practical AI integration**.
+---
+
+## 🎯 Key Features
+
+- ✅ **Self-Healing Locators** - Automatically recover from broken selectors
+- ✅ **AI-Powered** - Uses OpenAI/Azure/Ollama for intelligent selector generation
+- ✅ **Fallback Strategy** - Multiple fallback selectors per element
+- ✅ **Auto-Update** - Automatically updates locator files after healing
+- ✅ **Structured Logging** - Winston-based JSON logging with healing analytics
+- ✅ **Allure Reporting** - Rich test reports with healing annotations
+- ✅ **CI/CD Ready** - GitHub Actions pipeline with parallel execution
+- ✅ **Page Object Model** - Clean, maintainable test architecture
 
 ---
 
-## 🎯 Project Goals
-
-The primary objective of this framework is to:
-
-- Detect broken UI locators dynamically at runtime
-- Heal selectors automatically using AI/LLM reasoning
-- Retry failed test steps with healed locators
-- Persist updated selectors for future executions
-- Reduce flaky tests and manual maintenance
-- Improve CI stability and trust in automation results
-
----
-
-## ❗ Problem Statement
-
-Traditional test automation frameworks:
-
-- Fail immediately when locators change
-- Require frequent manual updates
-- Produce flaky results due to async UI behavior
-- Break CI/CD pipelines
-- Increase long-term maintenance cost
-
-### ✅ Solution
-
-This framework **adapts dynamically instead of failing fast**, by introducing an **AI Self-Healing Layer** on top of Playwright.
-
----
-
-## 🧠 High-Level Architecture
+## 🏗️ Architecture
 
 ```
-
 Test Layer (E2E Specs)
-↓
+       ↓
 Page Object Layer (UI Actions)
-↓
+       ↓
 Smart Locator Resolver
-↓
+       ↓
 AI Self-Healing Engine
-↓
+       ↓
 Utilities / Config / Logging / Reporting
-
 ```
-
-Each layer is **independent, testable, and scalable**, following **clean architecture and separation of concerns**.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-
 ai-self-healing-playwright/
-│
 ├── src/
-│   ├── tests/
-│   │   └── e2e/
-│   │       ├── login.spec.ts
-│   │       ├── checkout.spec.ts
-│   │       └── user-flow.spec.ts
+│   ├── tests/e2e/           # E2E test specifications
+│   │   ├── login.spec.ts
+│   │   ├── checkout.spec.ts
+│   │   └── user-flow.spec.ts
 │   │
-│   ├── pages/
-│   │   ├── BasePage.ts
+│   ├── pages/               # Page Object classes
+│   │   ├── BasePage.ts      # Base with smart actions
 │   │   ├── LoginPage.ts
 │   │   └── DashboardPage.ts
 │   │
-│   ├── locators/
+│   ├── locators/            # JSON locator files
 │   │   ├── login.locators.json
 │   │   └── dashboard.locators.json
 │   │
-│   ├── ai/
-│   │   ├── HealingEngine.ts
+│   ├── ai/                  # Self-Healing Engine
+│   │   ├── HealingEngine.ts # Main orchestrator
+│   │   ├── LLMClient.ts     # OpenAI/Azure/Ollama
 │   │   ├── LocatorAnalyzer.ts
-│   │   ├── LLMClient.ts
 │   │   └── HealingStrategy.ts
 │   │
-│   ├── core/
+│   ├── core/                # Framework core
 │   │   ├── TestSetup.ts
 │   │   ├── RetryHandler.ts
 │   │   └── PlaywrightHooks.ts
 │   │
-│   ├── utils/
+│   ├── utils/               # Utilities
 │   │   ├── Logger.ts
 │   │   ├── DomSnapshot.ts
 │   │   ├── FileUtils.ts
 │   │   └── EnvLoader.ts
 │   │
-│   └── config/
+│   └── config/              # Configuration
 │       ├── playwright.config.ts
 │       ├── env.dev.ts
 │       ├── env.qa.ts
 │       └── env.prod.ts
 │
-├── reports/
-│   ├── allure-results/
-│   └── html-report/
-│
-├── .github/workflows/
-│   └── playwright-ci.yml
-│
+├── reports/                 # Test reports
+├── logs/                    # Log files
+├── .github/workflows/       # CI/CD
+├── playwright.config.ts     # Root config
 ├── package.json
 ├── tsconfig.json
-├── README.md
 └── .env
-
-````
-
----
-
-## 🧩 Module Responsibilities
-
-### 1️⃣ Test Layer (E2E Specs)
-
-- Contains **only business workflows**
-- Uses **Page Objects exclusively**
-- No locators or Playwright low-level APIs
-- Clean, readable, scenario-driven tests
-
-```ts
-test('User login flow', async ({ page }) => {
-  const login = new LoginPage(page);
-  await login.login('user', 'password');
-});
-````
+```
 
 ---
 
-### 2️⃣ Page Object Layer
+## 🚀 Quick Start
 
-* Encapsulates all UI actions
-* Uses **smart locator resolver**
-* Never fails immediately on missing locators
-* Exposes methods like:
+### Prerequisites
 
-  * `smartClick`
-  * `smartFill`
-  * `smartWait`
+- Node.js 18+
+- npm or yarn
+- OpenAI API key (or Azure OpenAI/Ollama for local)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-repo/ai-self-healing-playwright.git
+cd ai-self-healing-playwright
+
+# Install dependencies
+npm install
+
+# Install Playwright browsers
+npx playwright install
+```
+
+### Configuration
+
+1. Copy `.env` and add your API key:
+```bash
+# .env
+OPENAI_API_KEY=your-api-key-here
+LLM_PROVIDER=openai
+```
+
+2. Run tests:
+```bash
+# Run all tests
+npm test
+
+# Run with UI
+npm run test:ui
+
+# Run headed
+npm run test:headed
+
+# Run specific browser
+npm run test:chromium
+```
 
 ---
 
-### 3️⃣ Smart Locator Management
+## 🔧 Self-Healing Flow
 
-* Locators stored in JSON files
-* Each element supports:
+When a locator fails, the framework:
 
-  * One primary selector
-  * Multiple fallback selectors
-* Locators are **updated automatically after healing**
+1. **Detects Failure** - Catches Playwright exceptions
+2. **Tries Fallbacks** - Attempts fallback selectors from JSON
+3. **Captures DOM** - Snapshots page structure
+4. **Queries LLM** - Asks AI for alternative selectors
+5. **Validates** - Tests proposed selectors in browser
+6. **Updates File** - Saves working selector to JSON
+7. **Retries** - Re-executes the failed action
+8. **Logs Event** - Records healing for analytics
+
+```
+Test Step
+ → Locator Lookup
+ → Action Attempt
+ → Failure Detected ❌
+ → AI Healing Engine 🔧
+ → Locator Validation ✓
+ → Retry Action
+ → Continue Test ✅
+```
+
+---
+
+## 📝 Locator Format
+
+Locators are stored in JSON with primary and fallback selectors:
 
 ```json
 {
@@ -170,7 +182,8 @@ test('User login flow', async ({ page }) => {
     "primary": "#login-btn",
     "fallbacks": [
       "button:has-text('Login')",
-      "//button[contains(text(),'Login')]"
+      "[data-testid='login-button']",
+      "button[type='submit']"
     ]
   }
 }
@@ -178,156 +191,119 @@ test('User login flow', async ({ page }) => {
 
 ---
 
-### 4️⃣ AI Self-Healing Engine (Core Feature)
+## 🧪 Writing Tests
 
-The self-healing engine activates when Playwright throws:
+Tests use Page Objects with clean APIs:
 
-* `Element not found`
-* `Timeout exceeded`
-* `Strict mode violation`
+```typescript
+test('User login flow', async ({ page }, testInfo) => {
+  const loginPage = new LoginPage(page, testInfo);
+  const dashboardPage = new DashboardPage(page, testInfo);
 
-#### Mandatory Healing Flow
-
-1. Capture failed selector
-2. Capture DOM snapshot
-3. Extract element context (tag, text, attributes)
-4. Send structured prompt to LLM
-5. Receive 3–5 alternative selectors
-6. Validate selectors in browser
-7. Select the best working locator
-8. Update locator JSON automatically
-9. Retry the failed action
-10. Log healing event and outcome
-
----
-
-### 5️⃣ LLM Integration
-
-* Pluggable LLM client architecture
-* Supports:
-
-  * OpenAI
-  * Azure OpenAI
-  * Local LLMs (Ollama, LM Studio)
-
-#### Prompt Strategy
-
-* Prefer accessibility-based selectors
-* Prefer stable attributes (`aria-*`, `role`, `data-*`)
-* Avoid brittle XPath
-* Return Playwright-compatible selectors only
-
----
-
-### 6️⃣ Retry & Stability Engine
-
-* No blind retries
-* Retry **only after healing**
-* Track flaky behavior over time
-* Prevent infinite retry loops
-
----
-
-### 7️⃣ Logging & Reporting
-
-#### Logging
-
-* Structured JSON logging
-* Separate AI-healing logs
-* Logs include:
-
-  * Original selector
-  * Healed selector
-  * Confidence score
-  * Retry result
-
-#### Reporting
-
-* Allure report integration
-* Screenshots on failure
-* Video recordings for retries
-* Healed steps clearly marked in reports
-
----
-
-## 🔄 Execution Flow
-
-```
-Test Step
- → Locator Lookup
- → Action Attempt
- → Failure Detected
- → AI Healing Engine
- → Locator Validation
- → Retry Action
- → Test Continues
+  // Clean, readable test - no locators!
+  await loginPage.navigateToLogin();
+  await loginPage.login('tomsmith', 'SuperSecretPassword!');
+  
+  await dashboardPage.waitForDashboard();
+  expect(await dashboardPage.getWelcomeMessage()).toContain('secure area');
+});
 ```
 
 ---
 
-## ⚙️ Tech Stack
+## ⚙️ Environment Configuration
 
-| Category       | Technology                        |
-| -------------- | --------------------------------- |
-| Language       | TypeScript, JavaScript            |
-| Automation     | Playwright                        |
-| AI             | OpenAI / Azure OpenAI / Local LLM |
-| Design Pattern | Page Object Model                 |
-| Reporting      | Allure                            |
-| CI/CD          | GitHub Actions                    |
-| Logging        | Winston / Custom Logger           |
-| Config         | dotenv, tsconfig                  |
-
----
-
-## 🧪 Sample E2E Scenarios
-
-* User Login → Dashboard Navigation
-* User Registration Flow
-* Checkout & Payment Flow
-* Role-Based Access Validation
-* Cross-Browser Execution
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `LLM_PROVIDER` | AI provider (openai/azure/ollama) | `openai` |
+| `OPENAI_API_KEY` | OpenAI API key | - |
+| `TEST_ENV` | Environment (dev/qa/prod) | `dev` |
+| `BASE_URL` | Application base URL | `https://the-internet.herokuapp.com` |
+| `MAX_HEALING_RETRIES` | Max healing attempts | `3` |
+| `HEALING_CONFIDENCE_THRESHOLD` | Min confidence for healing | `0.7` |
+| `AUTO_UPDATE_LOCATORS` | Auto-update locator files | `true` |
 
 ---
 
-## 🚦 CI/CD Pipeline
+## 📊 Reporting
 
-* GitHub Actions workflow
-* Triggered on PR & main branch
-* Parallel execution
-* Upload test reports, screenshots, videos
-* Build fails **only if healing fails**
+### Allure Report
+```bash
+npm run allure:generate
+npm run allure:open
+```
 
----
-
-## 🏆 Best Practices Followed
-
-* Clean architecture
-* SOLID principles
-* Zero hard-coded selectors
-* Environment isolation
-* AI used **only when failures occur**
-* Enterprise-grade observability
-* Interview-ready, maintainable codebase
-
----
-
-## 📌 Resume Impact Statement
-
-> Designed and implemented an AI-powered self-healing Playwright automation framework using TypeScript, enabling automatic recovery from UI locator failures, reducing test maintenance effort and significantly improving CI pipeline stability.
+### Healing Logs
+Check `logs/healing.log` for detailed healing events:
+```json
+{
+  "level": "info",
+  "message": "Healing succeeded for loginButton",
+  "originalSelector": "#broken-selector",
+  "healedSelector": "button:has-text('Login')",
+  "confidenceScore": 0.85,
+  "duration": 1234
+}
+```
 
 ---
 
-## 📬 Next Enhancements (Optional)
+## 🚦 CI/CD
 
-* Visual AI comparison
-* Historical flaky test analytics
-* Confidence-based healing approval
-* Dashboard for healing metrics
+GitHub Actions workflow runs:
+- On push to main/master
+- On pull requests
+- Tests all browsers in parallel
+- Uploads Allure reports
+- Captures healing analytics
+
+---
+
+## 🔌 LLM Providers
+
+### OpenAI (Default)
+```env
+LLM_PROVIDER=openai
+OPENAI_API_KEY=sk-xxx
+OPENAI_MODEL=gpt-4-turbo-preview
+```
+
+### Ollama (Local - Free)
+```env
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama2
+```
+
+---
+
+## 🏆 Best Practices
+
+- ✅ Clean architecture with SOLID principles
+- ✅ Zero hard-coded selectors
+- ✅ Environment isolation
+- ✅ AI used only when failures occur
+- ✅ Interview-ready, maintainable codebase
+
+---
+
+## 📬 Future Enhancements
+
+- [ ] Visual AI comparison
+- [ ] Historical flaky test analytics
+- [ ] Confidence-based healing approval
+- [ ] Dashboard for healing metrics
+- [ ] Slack/Teams notifications
 
 ---
 
 ## 👨‍💻 Author
 
-**SDET / QA Automation Engineer**
+**SDET / QA Automation Engineer**  
 Focused on scalable test architecture, CI/CD stability, and AI-driven automation solutions.
+
+---
+
+## 📄 License
+
+MIT License
