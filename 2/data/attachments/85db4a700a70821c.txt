@@ -1,0 +1,3 @@
+[10:20:32] info: Navigated to login page {"service":"ai-self-healing-playwright"}
+[10:20:32] info: Login completed for user: invaliduser {"service":"ai-self-healing-playwright"}
+[10:20:32] info: Invalid username test passed {"service":"ai-self-healing-playwright"}
