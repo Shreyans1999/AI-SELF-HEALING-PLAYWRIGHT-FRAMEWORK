@@ -128,17 +128,19 @@ jobs:
       - name: Check for healing events
         id: check-healing
         run: |
-          if [ -f logs/healing.log ]; then
-            HEALING_COUNT=$(grep -c '"success":true' logs/healing.log 2>/dev/null || echo "0")
-            echo "healing_count=$HEALING_COUNT" >> $GITHUB_OUTPUT
-            if [ "$HEALING_COUNT" -gt "0" ]; then
-              echo "🔧 Self-healing occurred $HEALING_COUNT times during test run"
-              echo "has_healing=true" >> $GITHUB_OUTPUT
-            else
-              echo "has_healing=false" >> $GITHUB_OUTPUT
-            fi
+          # Count healing events across all log files (handles merged artifacts)
+          HEALING_COUNT=$(find logs -name "*.log" -type f -exec grep -h '"success":true' {} \; 2>/dev/null | wc -l || echo "0")
+          # Ensure HEALING_COUNT is a valid integer (trim whitespace)
+          HEALING_COUNT=$(echo "${HEALING_COUNT:-0}" | tr -d '[:space:]')
+          # Default to 0 if empty or non-numeric
+          if ! [[ "$HEALING_COUNT" =~ ^[0-9]+$ ]]; then
+            HEALING_COUNT=0
+          fi
+          echo "healing_count=$HEALING_COUNT" >> $GITHUB_OUTPUT
+          if [ "${HEALING_COUNT:-0}" -gt "0" ]; then
+            echo "🔧 Self-healing occurred $HEALING_COUNT times during test run"
+            echo "has_healing=true" >> $GITHUB_OUTPUT
           else
-            echo "healing_count=0" >> $GITHUB_OUTPUT
             echo "has_healing=false" >> $GITHUB_OUTPUT
           fi
 
