@@ -1,5 +1,5 @@
 # Environment files
-.env
+# .env is tracked in git (no sensitive keys stored directly)
 .env.local
 .env.*.local
 
