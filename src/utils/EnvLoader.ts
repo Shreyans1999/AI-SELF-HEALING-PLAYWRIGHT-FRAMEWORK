@@ -62,6 +62,7 @@ export function getEnvConfig(): EnvConfig {
  */
 export class EnvLoader {
     private static instance: EnvLoader;
+    private static warningShown: boolean = false;
     private envConfig: EnvConfig;
 
     private constructor() {
@@ -85,8 +86,12 @@ export class EnvLoader {
     private validateRequiredEnvVars(): void {
         const provider = this.getLLMProvider();
 
-        if (provider === 'openai' && !process.env.OPENAI_API_KEY) {
-            console.warn('⚠️ OPENAI_API_KEY not set. AI healing will not work.');
+        // Only show warning once per process and only if healing logging is enabled
+        if (provider === 'openai' && !process.env.OPENAI_API_KEY && !EnvLoader.warningShown) {
+            if (process.env.LOG_AI_HEALING !== 'false') {
+                console.warn('⚠️ OPENAI_API_KEY not set. AI healing will use fallback selectors only.');
+            }
+            EnvLoader.warningShown = true;
         }
     }
 

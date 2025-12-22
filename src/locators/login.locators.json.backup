@@ -18,14 +18,17 @@
     ]
   },
   "loginButton": {
-    "primary": "button.radius",
+    "primary": "button:has-text('Login')",
     "fallbacks": [
       "button[type='submit']",
       "#login-btn",
       "button:has-text('Login')",
       "[data-testid='login-button']",
-      "//button[@type='submit']"
-    ]
+      "//button[@type='submit']",
+      "button.radius"
+    ],
+    "lastHealed": "2025-12-22T19:09:30.232Z",
+    "healCount": 5
   },
   "loginForm": {
     "primary": "#login",

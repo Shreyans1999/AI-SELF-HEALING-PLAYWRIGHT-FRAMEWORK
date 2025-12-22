@@ -2,48 +2,92 @@ import { test, expect } from '@playwright/test';
 import { logger } from '../../utils/Logger.js';
 
 /**
- * Checkout E2E Tests (Placeholder)
+ * Interactive Elements E2E Tests
  * 
- * This is a placeholder test file demonstrating how checkout tests
- * would be structured using the self-healing framework.
- * 
- * Note: The demo site (the-internet.herokuapp.com) doesn't have
- * a checkout flow, so these tests are for demonstration purposes.
+ * Tests for various interactive elements on the demo site that
+ * benefit from the self-healing framework.
  */
 test.describe('Checkout Tests', () => {
-    test.skip('Add item to cart', async ({ page }, testInfo) => {
-        // This test is skipped as the demo site doesn't have a cart
-        // In a real application, you would:
-        // 1. Create a CartPage object
-        // 2. Use smartClick to add items
-        // 3. Verify cart count updates
+    test('Checkbox toggle interactions', async ({ page }) => {
+        // Navigate to checkboxes page
+        await page.goto('/checkboxes');
 
-        logger.info('Add to cart test - skipped (demo site limitation)');
+        // Get both checkboxes
+        const checkbox1 = page.locator('input[type="checkbox"]').first();
+        const checkbox2 = page.locator('input[type="checkbox"]').last();
+
+        // Verify initial states
+        await expect(checkbox1).not.toBeChecked();
+        await expect(checkbox2).toBeChecked();
+
+        // Toggle checkbox 1 (check it)
+        await checkbox1.check();
+        await expect(checkbox1).toBeChecked();
+
+        // Toggle checkbox 2 (uncheck it)
+        await checkbox2.uncheck();
+        await expect(checkbox2).not.toBeChecked();
+
+        // Toggle both again
+        await checkbox1.uncheck();
+        await checkbox2.check();
+        await expect(checkbox1).not.toBeChecked();
+        await expect(checkbox2).toBeChecked();
+
+        logger.info('Checkbox toggle test passed');
     });
 
-    test.skip('Complete checkout flow', async ({ page }, testInfo) => {
-        // This test is skipped as the demo site doesn't have checkout
-        // In a real application, you would:
-        // 1. Add items to cart
-        // 2. Navigate to checkout
-        // 3. Fill shipping information
-        // 4. Select payment method
-        // 5. Confirm order
+    test('File upload functionality', async ({ page }) => {
+        // Navigate to file upload page
+        await page.goto('/upload');
 
-        logger.info('Checkout flow test - skipped (demo site limitation)');
+        // Verify upload elements are present
+        const fileInput = page.locator('#file-upload');
+        const uploadButton = page.locator('#file-submit');
+
+        await expect(fileInput).toBeVisible();
+        await expect(uploadButton).toBeVisible();
+
+        // Create a test file and upload it
+        // Using Playwright's setInputFiles to simulate file selection
+        await fileInput.setInputFiles({
+            name: 'test-file.txt',
+            mimeType: 'text/plain',
+            buffer: Buffer.from('This is a test file for upload testing')
+        });
+
+        // Click upload button
+        await uploadButton.click();
+
+        // Verify upload success
+        await expect(page.locator('#uploaded-files')).toContainText('test-file.txt');
+
+        logger.info('File upload test passed');
     });
 
-    test.skip('Payment validation', async ({ page }, testInfo) => {
-        // This test is skipped as the demo site doesn't have payment
-        // In a real application, you would:
-        // 1. Navigate to payment page
-        // 2. Enter valid/invalid card details
-        // 3. Verify validation messages
+    test('Dynamic loading and waiting', async ({ page }) => {
+        // Navigate to dynamic loading page
+        await page.goto('/dynamic_loading/1');
 
-        logger.info('Payment validation test - skipped (demo site limitation)');
+        // Verify the start button is visible
+        const startButton = page.locator('#start button');
+        await expect(startButton).toBeVisible();
+
+        // The finish element should be hidden initially
+        const finishText = page.locator('#finish');
+        await expect(finishText).not.toBeVisible();
+
+        // Click start to trigger loading
+        await startButton.click();
+
+        // Wait for loading to complete and verify result
+        await expect(finishText).toBeVisible({ timeout: 10000 });
+        await expect(finishText).toContainText('Hello World!');
+
+        logger.info('Dynamic loading test passed');
     });
 
-    // Example test using the available demo site features
+    // Keep existing tests
     test('Navigate through multiple pages', async ({ page }) => {
         // This test demonstrates navigation through the demo site
         // The self-healing would kick in if any locators change
