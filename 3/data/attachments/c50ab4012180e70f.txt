@@ -1,0 +1,2 @@
+[18:15:16] info: Navigated to login page {"service":"ai-self-healing-playwright"}
+[18:15:16] info: Empty username test passed {"service":"ai-self-healing-playwright"}
