@@ -1,3 +1,0 @@
-[18:15:12] info: Navigated to login page {"service":"ai-self-healing-playwright"}
-[18:15:12] info: Login completed for user: tomsmith {"service":"ai-self-healing-playwright"}
-[18:15:12] info: Invalid password test passed {"service":"ai-self-healing-playwright"}

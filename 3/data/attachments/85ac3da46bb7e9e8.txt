@@ -1,6 +1,0 @@
-[18:14:58] info: Navigated to login page {"service":"ai-self-healing-playwright"}
-[18:14:58] info: Login completed for user: tomsmith {"service":"ai-self-healing-playwright"}
-[18:14:58] info: Dashboard loaded {"service":"ai-self-healing-playwright"}
-[18:14:58] info: Clicked logout button {"service":"ai-self-healing-playwright"}
-[18:14:59] info: Logout completed {"service":"ai-self-healing-playwright"}
-[18:14:59] info: Logout test passed {"service":"ai-self-healing-playwright"}

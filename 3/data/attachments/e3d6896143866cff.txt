@@ -1,2 +1,0 @@
-[18:15:15] info: Navigated to login page {"service":"ai-self-healing-playwright"}
-[18:15:15] info: Self-healing demo test passed {"service":"ai-self-healing-playwright"}
