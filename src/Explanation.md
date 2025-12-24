@@ -163,3 +163,177 @@ async clickLoginButton() {
 **Solution:** AI watches the page, understands context, and automatically finds new selectors when old ones fail.
 
 **Result:** Tests that repair themselves = less maintenance, more stable CI/CD, happier teams! 🎉
+
+---
+
+## 🔬 Real-World Healing Example (Detailed)
+
+### Scenario: Broken Login Button Selector
+
+The locator file had an intentionally broken selector:
+
+```json
+"loginButton": {
+    "primary": "#completely-wrong-selector",
+    "fallbacks": ["#also-broken", "#this-wont-work-either"]
+}
+```
+
+### What Happened During Test Execution:
+
+#### 1️⃣ Test Started
+```
+[02:15:54] info: Navigated to login page
+```
+
+#### 2️⃣ Primary Selector Failed
+```
+[02:16:04] info: Initiating healing for loginButton
+[02:16:04] info: 🔧 Starting healing for: loginButton
+    failedSelector: "#completely-wrong-selector"
+    page: "login"
+```
+
+#### 3️⃣ Ollama LLM Initialized
+```
+[02:16:04] info: Ollama Client initialized with model: llama3.1:8b
+[02:16:04] info: LLM Client initialized: ollama
+```
+
+#### 4️⃣ LLM Analyzed DOM and Returned Selectors
+```
+[02:16:19] info: LLM returned 3 selectors
+    selectors: [
+        "input[name=\"password\"] ~ button",
+        "#content > div.example > form > button",
+        "#content > div.example > form > button[type=\"submit\"]"
+    ]
+    reasoning: "The input element with name 'password' precedes the button 
+               in the DOM structure, making it a suitable preceding sibling 
+               selector. Alternatively, we can use the button's parent or 
+               type attributes for more specific targeting."
+```
+
+#### 5️⃣ Best Selector Validated and Selected
+```
+[02:16:19] info: Best selector selected: #content > div.example > form > button
+    confidence: 1.00
+```
+
+#### 6️⃣ Locator File Auto-Updated
+```
+[02:16:19] info: Updating locator: loginButton -> #content > div.example > form > button
+[02:16:19] info: Successfully wrote JSON file: login.locators.json
+[02:16:19] info: Locator file updated: login.loginButton -> #content > div.example > form > button
+```
+
+#### 7️⃣ Healing Completed Successfully
+```
+[02:16:19] info: ✅ Healing successful: loginButton
+    original: "#completely-wrong-selector"
+    healed: "#content > div.example > form > button"
+    confidence: 1
+```
+
+#### 8️⃣ Test Passed!
+```
+✓ [chromium] › login.spec.ts:18:9 › Login Tests › Valid login with correct credentials (37.1s)
+```
+
+---
+
+### How the LLM Prompt Works
+
+The healing engine sends this structured prompt to the LLM:
+
+```markdown
+# Element Locator Healing Request
+
+## Element Key (Variable Name)
+**loginButton**
+
+## Required Element Type
+**IMPORTANT: You MUST find a button (clickable submit element). 
+Do NOT select other element types.**
+
+## Failed Selector
+`#completely-wrong-selector`
+
+## Current DOM Context
+Page Title: The Internet
+Page URL: https://the-internet.herokuapp.com/login
+
+Relevant DOM Structure:
+```html
+<form id="login" name="login">
+    <input id="username" type="text" name="username">
+    <input id="password" type="password" name="password">
+    <button class="radius" type="submit">
+        <i class="fa fa-2x fa-sign-in"> Login</i>
+    </button>
+</form>
+\```
+
+## Task
+Find selectors for the **button (clickable submit element)** element named "loginButton".
+Generate 3-5 alternative Playwright-compatible selectors.
+Prioritize stability and uniqueness. Explain your reasoning.
+```
+
+---
+
+### Updated Locator File (After Healing)
+
+```json
+{
+  "loginButton": {
+    "primary": "#login > button[type=\"submit\"]",
+    "fallbacks": [
+      "[name=\"login\"] button",
+      "#content > div.example > form > button",
+      "#completely-wrong-selector",
+      "#also-broken"
+    ],
+    "lastHealed": "2025-12-24T20:46:33.190Z",
+    "healCount": 3
+  }
+}
+```
+
+**Key points:**
+- Primary selector updated to the healed value
+- Previous working selectors added to fallbacks
+- `healCount` tracks how many times this element was healed
+- `lastHealed` timestamp for debugging
+
+---
+
+## 🛠️ LLM Provider: Ollama (Local & Free)
+
+This framework uses **Ollama** with `llama3.1:8b` for local AI inference:
+
+### Configuration (`.env`)
+```env
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.1:8b
+```
+
+### Benefits of Local LLM
+- ✅ **Free** - No API costs
+- ✅ **Fast** - No network latency
+- ✅ **Private** - DOM data stays on your machine
+- ✅ **Offline capable** - Works without internet
+
+---
+
+## 🎯 Key Takeaways
+
+| Aspect | Value |
+|--------|-------|
+| Total Healing Time | ~15 seconds |
+| Selectors Generated | 3 per request |
+| Confidence Threshold | 0.7 (configurable) |
+| Auto-Update Files | Yes (configurable) |
+| LLM Provider | Ollama (local) / OpenAI / Azure |
+| Model Used | llama3.1:8b |

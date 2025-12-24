@@ -18,14 +18,16 @@
     ]
   },
   "loginButton": {
-    "primary": "[name='login'] button",
+    "primary": "#login > button[type=\"submit\"]",
     "fallbacks": [
-      "#completely-wrong-button-selector",
-      "#also-wrong-fallback",
-      "#still-wrong"
+      "[name=\"login\"] button",
+      "#content > div.example > form > button",
+      "#completely-wrong-selector",
+      "#also-broken",
+      "#this-wont-work-either"
     ],
-    "lastHealed": "2025-12-24T20:09:49.615Z",
-    "healCount": 1
+    "lastHealed": "2025-12-24T20:46:33.190Z",
+    "healCount": 3
   },
   "loginForm": {
     "primary": "#login",
