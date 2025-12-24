@@ -107,7 +107,8 @@ export class HealingEngine {
             const analysis = LocatorAnalyzer.analyze(
                 context.failedSelector,
                 domSnapshot,
-                context.locatorEntry
+                context.locatorEntry,
+                context.elementKey
             );
             const prompt = LocatorAnalyzer.buildPrompt(analysis);
 

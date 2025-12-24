@@ -6,8 +6,10 @@ This guide helps you demonstrate the AI Self-Healing feature to interviewers in 
 
 ## 📋 Pre-Demo Checklist
 
-- [ ] Valid `OPENAI_API_KEY` in `.env` file
-- [ ] Internet connection (for LLM calls + test website)
+- [ ] Ollama is running (`ollama serve` in a terminal)
+- [ ] Model pulled (`ollama pull llama3.1:8b`)
+- [ ] `.env` configured with `LLM_PROVIDER=ollama`
+- [ ] Internet connection (for test website)
 - [ ] Run `npm install` to ensure dependencies are installed
 - [ ] Run tests once to confirm they pass before demo
 
@@ -37,13 +39,12 @@ Open `src/locators/login.locators.json` and make this change:
 **BEFORE (working):**
 ```json
 "loginButton": {
-    "primary": "button.radius",
+    "primary": "button[type='submit']",
     "fallbacks": [
-        "button[type='submit']",
-        "#login-btn",
+        "button.radius",
+        "#login button",
         "button:has-text('Login')",
-        "[data-testid='login-button']",
-        "//button[@type='submit']"
+        "form#login button"
     ]
 }
 ```
@@ -54,8 +55,7 @@ Open `src/locators/login.locators.json` and make this change:
     "primary": "#completely-wrong-selector",
     "fallbacks": [
         "#also-broken",
-        "#this-wont-work-either",
-        "#definitely-not-this"
+        "#this-wont-work-either"
     ]
 }
 ```
@@ -176,13 +176,12 @@ After the demo, restore the working selectors:
 ### Login Button (Original):
 ```json
 "loginButton": {
-    "primary": "button.radius",
+    "primary": "button[type='submit']",
     "fallbacks": [
-        "button[type='submit']",
-        "#login-btn",
+        "button.radius",
+        "#login button",
         "button:has-text('Login')",
-        "[data-testid='login-button']",
-        "//button[@type='submit']"
+        "form#login button"
     ]
 }
 ```
@@ -219,10 +218,11 @@ After the demo, restore the working selectors:
 
 | Issue | Solution |
 |-------|----------|
-| Test fails even with healing | Check `.env` has valid API key |
-| LLM not responding | Check internet connection |
+| Test fails even with healing | Check Ollama is running (`ollama serve`) |
+| LLM not responding | Run `ollama list` to verify model is available |
 | No healing logs | Ensure `logs/` directory exists |
 | Test passes immediately | Make sure you broke ALL fallbacks too |
+| Model pulls wrong selectors | Ensure `.env` has `OLLAMA_MODEL=llama3.1:8b` |
 
 ---
 

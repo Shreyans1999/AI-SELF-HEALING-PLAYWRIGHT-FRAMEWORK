@@ -7,6 +7,7 @@ import { logger } from '../utils/Logger.js';
  */
 export interface LocatorAnalysis {
     failedSelector: string;
+    elementKey: string;
     elementType: string;
     expectedAttributes: Record<string, string>;
     expectedText?: string;
@@ -24,9 +25,11 @@ export class LocatorAnalyzer {
     public static analyze(
         failedSelector: string,
         domSnapshot: DomSnapshot,
-        locatorEntry: LocatorEntry | null
+        locatorEntry: LocatorEntry | null,
+        elementKey?: string
     ): LocatorAnalysis {
-        const elementType = this.inferElementType(failedSelector);
+        // Use elementKey to infer type first (more reliable), then fall back to selector
+        const elementType = this.inferElementType(elementKey || '', failedSelector);
         const expectedAttributes = this.extractExpectedAttributes(failedSelector);
         const expectedText = this.extractExpectedText(failedSelector);
 
@@ -38,6 +41,7 @@ export class LocatorAnalyzer {
 
         const analysis: LocatorAnalysis = {
             failedSelector,
+            elementKey: elementKey || '',
             elementType,
             expectedAttributes,
             expectedText,
@@ -50,31 +54,41 @@ export class LocatorAnalyzer {
     }
 
     /**
-     * Infer element type from selector
+     * Infer element type from elementKey and selector
+     * elementKey (e.g., 'loginButton') takes priority over selector
      */
-    private static inferElementType(selector: string): string {
+    private static inferElementType(elementKey: string, selector: string): string {
+        // Check elementKey first (more reliable since it's semantic)
+        const keyLower = elementKey.toLowerCase();
         const selectorLower = selector.toLowerCase();
+        const combined = keyLower + ' ' + selectorLower;
 
-        if (selectorLower.includes('button') || selectorLower.includes('btn') || selectorLower.includes('submit')) {
-            return 'button';
+        if (combined.includes('button') || combined.includes('btn') || combined.includes('submit')) {
+            return 'button (clickable submit element)';
         }
-        if (selectorLower.includes('input') || selectorLower.includes('field')) {
+        if (combined.includes('input') || combined.includes('field') || combined.includes('username') || combined.includes('password') || combined.includes('email')) {
             return 'input';
         }
-        if (selectorLower.includes('link') || selectorLower.includes('href') || selector.startsWith('a')) {
+        if (combined.includes('link') || combined.includes('href') || selector.startsWith('a')) {
             return 'link';
         }
-        if (selectorLower.includes('select') || selectorLower.includes('dropdown')) {
+        if (combined.includes('select') || combined.includes('dropdown')) {
             return 'select';
         }
-        if (selectorLower.includes('checkbox')) {
+        if (combined.includes('checkbox')) {
             return 'checkbox';
         }
-        if (selectorLower.includes('radio')) {
+        if (combined.includes('radio')) {
             return 'radio';
         }
-        if (selectorLower.includes('text') || selectorLower.includes('label') || selectorLower.includes('heading')) {
+        if (combined.includes('message') || combined.includes('error') || combined.includes('success') || combined.includes('flash')) {
+            return 'message/notification element';
+        }
+        if (combined.includes('text') || combined.includes('label') || combined.includes('heading') || combined.includes('title')) {
             return 'text';
+        }
+        if (combined.includes('form')) {
+            return 'form';
         }
 
         // Extract tag from selector
@@ -211,11 +225,14 @@ export class LocatorAnalyzer {
 
         parts.push('# Element Locator Healing Request');
         parts.push('');
+        parts.push('## Element Key (Variable Name)');
+        parts.push(`**${analysis.elementKey}**`);
+        parts.push('');
+        parts.push('## Required Element Type');
+        parts.push(`**IMPORTANT: You MUST find a ${analysis.elementType}. Do NOT select other element types.**`);
+        parts.push('');
         parts.push('## Failed Selector');
         parts.push(`\`${analysis.failedSelector}\``);
-        parts.push('');
-        parts.push('## Element Type');
-        parts.push(analysis.elementType);
         parts.push('');
 
         if (Object.keys(analysis.expectedAttributes).length > 0) {
@@ -244,7 +261,8 @@ export class LocatorAnalyzer {
         parts.push(analysis.domContext);
         parts.push('');
         parts.push('## Task');
-        parts.push('Generate 3-5 alternative Playwright-compatible selectors that could locate this element.');
+        parts.push(`Find selectors for the **${analysis.elementType}** element named "${analysis.elementKey}".`);
+        parts.push('Generate 3-5 alternative Playwright-compatible selectors.');
         parts.push('Prioritize stability and uniqueness. Explain your reasoning.');
 
         return parts.join('\n');

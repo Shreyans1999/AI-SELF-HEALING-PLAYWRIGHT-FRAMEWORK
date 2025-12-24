@@ -19,6 +19,11 @@ export interface RetryConfig {
 export type ActionFunction<T> = () => Promise<T>;
 
 /**
+ * Action factory type - creates action with current selector
+ */
+export type ActionFactory<T> = (currentSelector: string) => Promise<T>;
+
+/**
  * Retry result
  */
 export interface RetryResult<T> {
@@ -58,9 +63,10 @@ export class RetryHandler {
 
     /**
      * Execute action with retry and self-healing
+     * @param actionFactory - Function that takes current selector and returns action promise
      */
     public async executeWithHealing<T>(
-        action: ActionFunction<T>,
+        actionFactory: ActionFactory<T>,
         context: {
             pageName: string;
             elementKey: string;
@@ -81,8 +87,8 @@ export class RetryHandler {
             attempts++;
 
             try {
-                logger.debug(`Attempt ${attempts}/${this.config.maxRetries + 1} for ${context.elementKey}`);
-                const result = await action();
+                logger.debug(`Attempt ${attempts}/${this.config.maxRetries + 1} for ${context.elementKey} with selector: ${currentSelector}`);
+                const result = await actionFactory(currentSelector);
 
                 // Success - clear flaky pattern tracking
                 this.clearFlakyPattern(context.elementKey);

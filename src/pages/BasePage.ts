@@ -96,8 +96,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 await locator.click({ timeout: options?.timeout || 10000 });
                 logger.debug(`Clicked: ${elementKey}`);
             },
@@ -118,8 +118,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 await locator.fill(value, { timeout: options?.timeout || 10000 });
                 logger.debug(`Filled: ${elementKey} with value`);
             },
@@ -140,8 +140,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 await locator.pressSequentially(value, { delay: options?.delay || 50 });
                 logger.debug(`Typed: ${elementKey}`);
             },
@@ -162,8 +162,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 await locator.waitFor({
                     state: options?.state || 'visible',
                     timeout: options?.timeout || 10000
@@ -187,8 +187,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         const result = await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 const text = await locator.textContent();
                 logger.debug(`Got text from: ${elementKey}`);
                 return text || '';
@@ -212,8 +212,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         const result = await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 const text = await locator.innerText();
                 logger.debug(`Got inner text from: ${elementKey}`);
                 return text;
@@ -251,8 +251,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 if (typeof value === 'string') {
                     await locator.selectOption(value);
                 } else {
@@ -277,8 +277,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 await locator.check();
                 logger.debug(`Checked: ${elementKey}`);
             },
@@ -299,8 +299,8 @@ export abstract class BasePage {
         const selector = this.getSelector(elementKey);
 
         await this.retryHandler.executeWithHealing(
-            async () => {
-                const locator = this.getLocator(selector);
+            async (currentSelector: string) => {
+                const locator = this.getLocator(currentSelector);
                 await locator.uncheck();
                 logger.debug(`Unchecked: ${elementKey}`);
             },

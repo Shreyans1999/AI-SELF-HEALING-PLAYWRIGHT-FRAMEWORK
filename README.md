@@ -268,12 +268,75 @@ OPENAI_API_KEY=sk-xxx
 OPENAI_MODEL=gpt-4-turbo-preview
 ```
 
-### Ollama (Local - Free)
+### Ollama (Local - Free) ⭐ Recommended
+
+Ollama allows you to run AI models locally for free. Here's the complete setup guide:
+
+#### Step 1: Install Ollama
+
+**macOS (Homebrew):**
+```bash
+brew install ollama
+```
+
+**macOS/Linux (Official):**
+```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+```
+
+**Windows:**
+Download from [ollama.ai/download](https://ollama.ai/download)
+
+#### Step 2: Start Ollama Server
+
+```bash
+# Start the server (keep this terminal open)
+ollama serve
+```
+
+The server runs at `http://localhost:11434` by default.
+
+#### Step 3: Pull the Model
+
+```bash
+# Recommended model for selector healing (~4.9GB download)
+ollama pull llama3.1:8b
+```
+
+**Alternative Models:**
+| Model | Size | Speed | Quality |
+|-------|------|-------|---------|
+| `llama3.1:8b` | 4.9GB | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| `mistral:7b` | 4GB | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| `codellama:13b` | 7GB | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| `qwen2.5:7b` | 4.4GB | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+
+#### Step 4: Configure .env
+
 ```env
 LLM_PROVIDER=ollama
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=llama2
+OLLAMA_MODEL=llama3.1:8b
 ```
+
+#### Step 5: Verify Setup
+
+```bash
+# Test the model
+ollama run llama3.1:8b "Hello, can you generate a CSS selector?"
+
+# Check running models
+ollama list
+```
+
+#### Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| "ollama server not responding" | Run `ollama serve` in a separate terminal |
+| "model not found" | Run `ollama pull llama3.1:8b` |
+| Slow responses | Try `mistral:7b` for faster inference |
+| Out of memory | Use a smaller model like `llama3.2:3b` |
 
 ---
 
