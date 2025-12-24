@@ -1,5 +1,0 @@
-[17:02:42] info: Navigated to login page {"service":"ai-self-healing-playwright"}
-[17:02:42] info: Login completed for user: wronguser {"service":"ai-self-healing-playwright"}
-[17:02:42] info: Login completed for user: tomsmith {"service":"ai-self-healing-playwright"}
-[17:02:42] info: Dashboard loaded {"service":"ai-self-healing-playwright"}
-[17:02:42] info: Failed login recovery flow test passed {"service":"ai-self-healing-playwright"}
