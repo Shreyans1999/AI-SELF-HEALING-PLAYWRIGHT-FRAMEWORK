@@ -1,1 +1,0 @@
-[20:41:13] info: Checkbox toggle test passed {"service":"ai-self-healing-playwright"}

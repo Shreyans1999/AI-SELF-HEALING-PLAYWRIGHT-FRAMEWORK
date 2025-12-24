@@ -1,0 +1,4 @@
+[20:55:40] info: Navigated to login page {"service":"ai-self-healing-playwright"}
+[20:55:40] info: Login completed for user: tomsmith {"service":"ai-self-healing-playwright"}
+[20:55:40] info: Dashboard loaded {"service":"ai-self-healing-playwright"}
+[20:55:40] info: Session persistence test passed {"service":"ai-self-healing-playwright"}
